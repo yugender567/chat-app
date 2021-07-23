@@ -3,7 +3,7 @@ import { auth, database } from '../misc/firebase';
 
 const ProfileContext = createContext();
 
-export const ProfileProvider = ({ Children }) => {
+export const ProfileProvider = ({ children }) => {
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,7 +16,7 @@ export const ProfileProvider = ({ Children }) => {
       if (authObj) {
         userRef = database.ref(`/profiles/${authObj.uid}`);
         userRef.on('value', snap => {
-          const { name, createdAt } = snap.value();
+          const { name, createdAt } = snap.val();
 
           const data = {
             name,
@@ -46,7 +46,7 @@ export const ProfileProvider = ({ Children }) => {
 
   return (
     <ProfileContext.Provider value={{ isLoading, profile }}>
-      {Children}
+      {children}
     </ProfileContext.Provider>
   );
 };
