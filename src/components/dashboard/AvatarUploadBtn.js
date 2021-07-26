@@ -4,6 +4,7 @@ import AvatarEditor from 'react-avatar-editor';
 import { useModalState } from '../../misc/custom-hooks';
 import { useProfile } from '../../context/profile.context';
 import { database, storage } from '../../misc/firebase';
+import ProfileAvatar from '../ProfileAvatar';
 
 const fileInputTypes = '.png, .jpeg, .jpg';
 
@@ -14,7 +15,7 @@ const isValidFile = file => {
 };
 const getBlob = canvas => {
   return new Promise((resolve, reject) => {
-    canvas.onBlob(blob => {
+    canvas.toBlob(blob => {
       if (blob) {
         resolve(blob);
       } else {
@@ -25,7 +26,7 @@ const getBlob = canvas => {
 };
 
 const AvatarUploadBtn = () => {
-  const { isOpen, open, close } = useModalState();
+  const { isopen, open, close } = useModalState();
 
   const { profile } = useProfile();
 
@@ -80,6 +81,11 @@ const AvatarUploadBtn = () => {
   };
   return (
     <div className="mt-3 text-center">
+      <ProfileAvatar
+        src={profile.avatar}
+        name={profile.name}
+        className="width-200 height-200 img-fullsize font-huge"
+      />
       <div>
         <label
           htmlFor="avatar-upload"
@@ -94,7 +100,7 @@ const AvatarUploadBtn = () => {
             onChange={onFileInputChange}
           />
         </label>
-        <Modal show={isOpen} onHide={close}>
+        <Modal show={isopen} onHide={close}>
           <Modal.Header>
             <Modal.Title>Adjust and Upload new Avatar</Modal.Title>
           </Modal.Header>
